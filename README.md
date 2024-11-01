@@ -4,10 +4,10 @@ Author: Brittany Blackmon
 Video Presentation: https://www.youtube.com/watch?v=aMsHQjj4yms
 ---
 
-Executive Summary
+Executive Summary:
 This analysis aims to predict employee attrition by leveraging machine learning models on various employee features, such as job satisfaction, monthly income, and overtime status. The results are used to propose actionable strategies for retention, particularly targeting high-risk employee groups.
 
-Introduction
+Introduction:
 Employee attrition is a key challenge for companies aiming to retain talent and minimize costs associated with turnover. This project leverages multiple machine learning models, including K-Nearest Neighbors (KNN) and Gradient Boosting Machines (GBM), to classify employees at risk of leaving. The analysis compares model performance, assesses classification accuracy and sensitivity, and makes strategic recommendations for retention.
 
 Project Objectives
@@ -16,12 +16,9 @@ Project Objectives
 3. Propose actionable recommendations based on findings.
 
 
-# Load libraries
 library(caret)
 library(ggplot2)
-library(DMwR) # For SMOTE if used
 library(gbm)
-library(randomForest)
 
 set.seed(123)
 
