@@ -1,11 +1,7 @@
 ---
-title: "Employee Attrition Prediction Analysis"
+title: Employee Attrition Prediction Analysis for Frito Lay
 author: "Your Name"
-date: "`r Sys.Date()`"
-output: 
-  html_document:
-    toc: true
-    toc_depth: 2
+Video Presentation: https://www.youtube.com/watch?v=aMsHQjj4yms
 ---
 
 # Executive Summary
@@ -37,4 +33,44 @@ data <- read.csv("your_data.csv")
 # Convert categorical variables
 data$Attrition <- as.factor(data$Attrition)
 str(data)
+
+# Quick summary statistics
+summary(data)
+
+# Visualize key factors
+ggplot(data, aes(x = MonthlyIncome, fill = Attrition)) +
+  geom_histogram(position = "dodge") +
+  labs(title = "Monthly Income Distribution by Attrition Status")
+
+# Train-test split
+trainIndex <- createDataPartition(data$Attrition, p = 0.8, list = FALSE)
+train_data <- data[trainIndex, ]
+test_data <- data[-trainIndex, ]
+
+# KNN with k = 11
+knn_model <- train(Attrition ~ JobSatisfaction + MonthlyIncome + YearsAtCompany + OverTime + EnvironmentSatisfaction,
+                   data = train_data,
+                   method = "knn",
+                   tuneGrid = expand.grid(k = 11),
+                   trControl = trainControl(method = "cv", number = 5, classProbs = TRUE, summaryFunction = twoClassSummary),
+                   metric = "Sensitivity")
+
+# Prediction and sensitivity calculation
+knn_pred <- predict(knn_model, test_data)
+confusionMatrix(knn_pred, test_data$Attrition, positive = "Yes")
+
+
+# GBM model with sensitivity metric
+gbm_model <- train(
+  Attrition ~ JobSatisfaction + MonthlyIncome + YearsAtCompany + OverTime + EnvironmentSatisfaction,
+  data = train_data,
+  method = "gbm",
+  trControl = trainControl(method = "cv", number = 5, classProbs = TRUE, summaryFunction = twoClassSummary),
+  metric = "Sensitivity",
+  verbose = FALSE
+)
+
+# Prediction and sensitivity calculation
+gbm_pred <- predict(gbm_model, test_data)
+confusionMatrix(gbm_pred, test_data$Attrition, positive = "Yes")
 
